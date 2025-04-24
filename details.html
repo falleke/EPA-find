@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes da Sala</title>
+  
+  <!-- Slick Carousel CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Your main stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Spacing overrides -->
+  <style>
+    /* Push content below fixed nav */
+    .room-detail-container {
+      max-width: 800px;
+      margin: 6rem auto 2rem;
+      padding: 0 1.5rem;
+    }
+    /* Heading spacing */
+    #room-title {
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+    }
+    /* Image spacing (already has bottom margin in your CSS) */
+    .room-detail-img {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    /* Description spacing & typography */
+    #room-description {
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      text-align: justify;
+    }
+    /* Section title spacing */
+    .room-items-section h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    /* Grid spacing override if needed */
+    .items-grid {
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo-container">
+      <img src="images/logo.png" alt="EPA Logo" class="logo">
+    </div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Cursos</a></li>
+      <li><a href="#">Salas</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+    <div class="toggle-container">
+      <label class="custom-toggle">
+        <input type="checkbox" id="dark-toggle">
+        <span>🌞</span>
+        <span>🌙</span>
+        <span class="dark-mode-label"></span>
+      </label>
+    </div>
+  </nav>
+
+  <main class="room-detail-container">
+    <h1 id="room-title">Nome da Sala</h1>
+    <div class="room-detail-img">
+      <img id="room-image" src="images/placeholder.jpg" alt="Imagem da Sala">
+    </div>
+    <p id="room-description">Descrição da sala aqui...</p>
+
+    <div class="room-items-section">
+      <h2>Itens nesta sala</h2>
+      <div class="items-grid">
+        <a class="item-card" href="item-details.html?item=cr10-smart">
+          <div class="item-image-container">
+            <img src="images/cr10-smart.jpg" alt="Impressora 3D Média Gama – CR-10 Smart" />
+            <div class="hover-overlay">Clica-me!</div>
+          </div>
+          <p class="item-name">Impressora 3D Média Gama – CR-10 Smart</p>
+        </a>
+        
+        <a class="item-card" href="item-details.html?item=cr5-pro">
+          <div class="item-image-container">
+            <img src="images/cr5-pro.jpg" alt="Impressora 3D Alta Resolução – CR-5 PRO High-Temp" />
+            <div class="hover-overlay">Clica-me!</div>
+          </div>
+          <p class="item-name">Impressora 3D Alta Resolução – CR-5 PRO High-Temp</p>
+        </a>
+      
+        <a class="item-card" href="item-details.html?item=caixa-impressora">
+          <div class="item-image-container">
+            <img src="images/caixa-impressora.jpg" alt="Caixa para Impressora 3D – Creality" />
+            <div class="hover-overlay">Clica-me!</div>
+          </div>
+          <p class="item-name">Caixa para Impressora 3D – Creality</p>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Your existing scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>
+    // Theme toggle setup...
+    const toggle = document.getElementById('dark-toggle');
+    toggle.checked = false;
+    toggle.addEventListener('change', () => {
+      document.body.classList.toggle('dark', toggle.checked);
+      localStorage.setItem('theme', toggle.checked ? 'dark' : 'light');
+    });
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      toggle.checked = true;
+    }
+
+    // Filter & search (if needed)...
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const roomCards = document.querySelectorAll('.room-card');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelector('.filter-btn.active').classList.remove('active');
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        roomCards.forEach(card => {
+          card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter);
+        });
+      });
+    });
+    document.querySelector('.search-input')?.addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      roomCards.forEach(card => {
+        card.classList.toggle('hidden', !card.textContent.toLowerCase().includes(term));
+      });
+    });
+
+    // Slick slider init
+    $(document).ready(function(){
+      $('.slider').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        dots: true,
+        arrows: true
+      });
+    });
+
+    // Room detail logic
+    const roomData = {
+      "sala-informatica-1": {
+        title: "SALA INFORMÁTICA 1",
+        image: "images/sala4.jpg",
+        description: "Sala equipada com computadores modernos e acesso à internet para aulas práticas de informática."
+      }
+      // add more rooms here...
+    };
+    const params = new URLSearchParams(window.location.search);
+    const room = params.get('room');
+    const data = roomData[room];
+    if (data) {
+      document.getElementById('room-title').textContent = data.title;
+      document.getElementById('room-image').src = data.image;
+      document.getElementById('room-image').alt = `Imagem da ${data.title}`;
+      document.getElementById('room-description').textContent = data.description;
+    } else {
+      document.querySelector('main').innerHTML = "<p style='text-align:center;'>Sala não encontrada.</p>";
+    }
+  </script>
+</body>
+</html>
